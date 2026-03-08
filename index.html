@@ -10,19 +10,32 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getDatabase, ref, onValue, update, push } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
 
-        // CONFIGURATION - Replace with your Firebase details
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // CONFIGURATION - Updated with your orchestra-26 credentials
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxbhjINJz0B6VUPadxh2jGyyP8YqITQe4",
+            authDomain: "orchestra-26.firebaseapp.com",
+            databaseURL: "https://orchestra-26-default-rtdb.firebaseio.com",
+            projectId: "orchestra-26",
+            storageBucket: "orchestra-26.firebasestorage.app",
+            messagingSenderId: "805534364950",
+            appId: "1:805534364950:web:61130ca7b280c200d88c37",
+            measurementId: "G-YY0LTXWXPM"
+        };
+
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'brandix-orchestrator';
         
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const analytics = getAnalytics(app);
 
         // STATE
         let tasks = {};
         let selectedTaskId = null;
 
         // DATA SYNC (Realtime Database Path)
+        // Note: Using the standard path required for the environment
         const tasksRef = ref(db, `artifacts/${appId}/public/data/tasks`);
         
         onValue(tasksRef, (snapshot) => {
@@ -101,11 +114,11 @@
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10">
                                     <span class="text-xs font-bold opacity-60">Sourcing</span>
-                                    <span class="text-[10px] font-bold">sourcing@factory.com</span>
+                                    <span class="text-[10px] font-bold">${task.routing_info?.sourcing || 'sourcing@factory.com'}</span>
                                 </div>
                                 <div class="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10">
                                     <span class="text-xs font-bold opacity-60">Production</span>
-                                    <span class="text-[10px] font-bold">floor@factory.com</span>
+                                    <span class="text-[10px] font-bold">${task.routing_info?.floor || 'floor@factory.com'}</span>
                                 </div>
                             </div>
                         </div>
